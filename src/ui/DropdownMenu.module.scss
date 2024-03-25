@@ -1,0 +1,45 @@
+.navbar {
+  display: flex;
+  flex-direction: row;
+  background-color: rgb(var(--red-color));
+}
+
+.menu {
+  li.menu__title {
+    background-color: rgba(var(--red-color));
+    cursor: default;
+
+    &:hover {
+      background-color: rgba(var(--red-color));
+      color: rgb(var(--white-color));
+    }
+  }
+
+  li {
+    width: 100%;
+    word-break: break-all;
+    background-color: rgb(var(--base-color));
+    padding: 15px 25px;
+    cursor: pointer;
+    color: rgb(var(--white-color));
+
+    &:hover {
+      color: rgb(var(--base-color));
+      background-color: rgb(var(--white-color));
+    }
+  }
+}
+
+.menu__dropdown {
+  display: none;
+  position: absolute;
+  z-index: 100;
+
+  &:hover {
+    display: block;
+  }
+}
+
+.menu__title:hover ~ .menu__dropdown {
+  display: block;
+}
