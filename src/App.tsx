@@ -1,42 +1,33 @@
 import DropdownMenu from "./ui/DropdownMenu.tsx";
 import type {NavType} from "./utils/NavItem.type.ts";
+import AddTechnicForm from "./modules/AddTechnicForm.tsx";
+import {
+    createBrowserRouter,
+    RouterProvider,
+} from "react-router-dom";
 
 function App() {
-    const data: NavType[] = [
-        {
-            mainElement: 'Земляные', children: [
-                {title: 'Экскаватор', url: '/1'},
-                {title: 'Погрузчик', url: '/3'},
-                {title: 'Буровая', url: '/4'},
-            ]
-        },
-        {
-            mainElement: 'Дорожные', children: [
-                {title: 'Асфальтоукладчик', url: '/1'},
-                {title: 'Грейдер', url: '/2'},
-                {title: 'Каток', url: '/3'},
-                {title: 'Комунальная', url: '/4'},
-            ]
-        },
-        {
-            mainElement: 'Дорожные', children: [
-                {title: 'Грейдер', url: '/2'},
-                {title: 'Каток', url: '/3'},
-                {title: 'Комунальная', url: '/4'},
-            ]
-        },
-        {
-            mainElement: 'Дорожные', children: [
-                {title: 'Грейдер', url: '/2'},
-                {title: 'Каток', url: '/3'},
-                {title: 'Комунальная', url: '/4'},
-            ]
-        },
-    ]
+    // const router = createBrowserRouter([
+    //     {
+    //         path: "/",
+    //         element: <Root />,
+    //         loader: rootLoader,
+    //         children: [
+    //             {
+    //                 path: "team",
+    //                 element: <Team />,
+    //                 loader: teamLoader,
+    //             },
+    //         ],
+    //     },
+    // ]);
+
 
     return (
         <div className='App'>
-            <DropdownMenu data={data}/>
+            <DropdownMenu />
+
+            <AddTechnicForm />
         </div>
     )
 }

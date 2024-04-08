@@ -1,9 +1,6 @@
 import styles from './DropdownMenu.module.scss';
 import type {NavType} from "../utils/NavItem.type.ts";
 import {Link} from "react-router-dom";
-interface Props {
-    data: NavType[];
-}
 
 const DropdownItem = ({ mainElement, children }: NavType) => {
     return (
@@ -24,7 +21,39 @@ const DropdownItem = ({ mainElement, children }: NavType) => {
     );
 }
 
-const DropdownMenu = ({data}: Props) => {
+const DropdownMenu = () => {
+    const data: NavType[] = [
+        {
+            mainElement: 'Земляные', children: [
+                {title: 'Экскаватор', url: '/1'},
+                {title: 'Погрузчик', url: '/3'},
+                {title: 'Буровая', url: '/4'},
+            ]
+        },
+        {
+            mainElement: 'Дорожные', children: [
+                {title: 'Асфальтоукладчик', url: '/1'},
+                {title: 'Грейдер', url: '/2'},
+                {title: 'Каток', url: '/3'},
+                {title: 'Комунальная', url: '/4'},
+            ]
+        },
+        {
+            mainElement: 'Дорожные', children: [
+                {title: 'Грейдер', url: '/2'},
+                {title: 'Каток', url: '/3'},
+                {title: 'Комунальная', url: '/4'},
+            ]
+        },
+        {
+            mainElement: 'Дорожные', children: [
+                {title: 'Грейдер', url: '/2'},
+                {title: 'Каток', url: '/3'},
+                {title: 'Комунальная', url: '/4'},
+            ]
+        },
+    ]
+
     return (
         <nav className={styles.navbar}>
             {
