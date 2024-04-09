@@ -1,0 +1,24 @@
+{
+    name: string,
+    city: string,
+    price: {
+        withTax: number,
+        withoutTax: number,
+        cash: number
+    },
+    propertyValues: {
+            value: string,
+            propertyId: number
+        }[],
+    categoryId: number,
+    company: {
+        name: string,
+        inn: string,
+        contacts: {
+                fullName: string,
+                phone: string,
+                email: string,
+                role: string
+            }[]
+    }
+}

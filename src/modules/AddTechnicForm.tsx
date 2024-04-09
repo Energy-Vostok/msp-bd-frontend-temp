@@ -1,26 +1,18 @@
-import styles from './AddTechnicForm.module.scss';
-import {
-    Formik,
-    Form,
-    Field,
-} from 'formik';
+import {SubmitHandler, useForm} from "react-hook-form";
 
-interface MyFormValues {
-    name: string,
-    category: string,
-    city: string,
+type AddForm = {
+    name: string;
+    city: string;
     price: {
         withTax: number,
         withoutTax: number,
         cash: number
-    },
+    };
     propertyValues: {
         value: string,
         propertyId: number
-    }[],
-    images: {
-        url: string
-    }[],
+    }[];
+    categoryId: number;
     company: {
         name: string,
         inn: string,
@@ -30,67 +22,72 @@ interface MyFormValues {
             email: string,
             role: string
         }[]
-    }
+    };
+    images: FileList | null;
 }
 
 const AddTechnicForm = () => {
-    const initialValues: MyFormValues = {
-        name: '',
-        category: '',
-        city: '',
-        price: {
-            withTax: 0,
-            withoutTax: 0,
-            cash: 0
-        },
-        propertyValues: [],
-        images: [],
-        company: {
-            name: '',
-            inn: '',
-            contacts: [],
-        }
-    };
+
+    const {
+        handleSubmit,
+        register,
+    } = useForm<AddForm>();
+
+    const submit: SubmitHandler<AddForm> = async () => {
+        const newData = {name: 'Земляные'};
+
+        alert(JSON.stringify(newData));
+        await fetch('http://51.250.115.182:8080/api/admin/category', {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(newData)
+        })
+            .then((res) => console.log(res))
+            .catch((e) => console.log(e))
+    }
+
     return (
-        <div>
+        <>
             <h1>Добавить новую технику</h1>
-            <Formik
-                initialValues={initialValues}
-                onSubmit={(values, actions) => {
-                    console.log({ values, actions });
-                    alert(JSON.stringify(values, null, 2));
-                    actions.setSubmitting(false);
-                }}
-            >
-                <Form className={styles.form}>
-                    <label htmlFor="name">Название</label>
-                    <Field id="name" name="name" placeholder="Название техники" />
+            <form onSubmit={handleSubmit(submit)}>
+                <label>
+                    Название
+                    <input type="text" {...register("name")}/>
+                </label>
 
-                    <label htmlFor="type">Категория</label>
-                    <Field name="category" as="select">
-                        <option value="Экскаватор">Экскаватор</option>
-                        <option value="Бульдозер">Бульдозер</option>
-                    </Field>
+                <label>
+                    Город
+                    <input type="text" {...register("city")}/>
+                </label>
 
-                    <label htmlFor="city">Город</label>
-                    <Field id="city" name="city" placeholder="Город" />
+                <label>Цена</label>
+                <label>
+                    С НДС
+                    <input type="number" {...register("price.withTax")}/>
+                </label>
+                <label>
+                    Без НДС
+                    <input type="number" {...register("price.withoutTax")}/>
+                </label>
+                <label>
+                    Наличные
+                    <input type="number" {...register("price.cash")}/>
+                </label>
 
-                    <label htmlFor="withTax">Цена с НДС</label>
-                    <Field id="withTax" name="withTax" placeholder="Название техники" />
+                <label>Компания</label>
 
-                    <label htmlFor="withoutTax">Цена без НДС</label>
-                    <Field id="withoutTax" name="withoutTax" placeholder="Название техники" />
+                <label>
+                    Фотографии
+                    <input type="file" multiple {...register("images")} />
+                </label>
 
-                    <label htmlFor="cash">Цена за наличные</label>
-                    <Field id="cash" name="cash" placeholder="Название техники" />
 
-                    <label htmlFor="name">Название</label>
-                    <Field id="name" name="name" placeholder="Название техники" />
-
-                    <button type="submit">Добавить</button>
-                </Form>
-            </Formik>
-        </div>
+                <button>Отправить</button>
+            </form>
+        </>
     );
 };
 

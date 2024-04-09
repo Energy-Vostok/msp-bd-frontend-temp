@@ -1,6 +1,8 @@
 import styles from './DropdownMenu.module.scss';
 import type {NavType} from "../utils/NavItem.type.ts";
 import {Link} from "react-router-dom";
+import {useEffect} from "react";
+import {getAllCategories} from "../api/categories.api.ts";
 
 const DropdownItem = ({ mainElement, children }: NavType) => {
     return (
@@ -22,6 +24,16 @@ const DropdownItem = ({ mainElement, children }: NavType) => {
 }
 
 const DropdownMenu = () => {
+    useEffect( () => {
+        const fetchCategories = async () => {
+            const data = await getAllCategories();
+
+            console.log(data);
+        }
+
+        fetchCategories();
+    }, []);
+
     const data: NavType[] = [
         {
             mainElement: 'Земляные', children: [
@@ -56,11 +68,14 @@ const DropdownMenu = () => {
 
     return (
         <nav className={styles.navbar}>
-            {
-                data.map(e => (
-                    <DropdownItem mainElement={e.mainElement} children={e.children} key={e.mainElement} />
-                ))
-            }
+            {/*<div className={styles.navbar__categories}>*/}
+                {
+                    data.map(e => (
+                        <DropdownItem mainElement={e.mainElement} children={e.children} key={e.mainElement} />
+                    ))
+                }
+            {/*</div>*/}
+            <Link to='/new'>Добавить технику</Link>
         </nav>
     )
 }
