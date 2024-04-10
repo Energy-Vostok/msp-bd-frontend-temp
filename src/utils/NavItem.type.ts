@@ -1,7 +1,7 @@
 export type NavType = {
-    mainElement: string,
+    name: string,
     children: {
-        title: string,
-        url: string
+        name: string,
+        id: string
     }[];
 }

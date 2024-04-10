@@ -1,20 +1,20 @@
 import styles from './DropdownMenu.module.scss';
 import type {NavType} from "../utils/NavItem.type.ts";
 import {Link} from "react-router-dom";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {getAllCategories} from "../api/categories.api.ts";
 
-const DropdownItem = ({ mainElement, children }: NavType) => {
+const DropdownItem = ({ name, children }: NavType) => {
     return (
             <ul className={styles.menu}>
                 <li className={styles.menu__title}>
-                    <h3>{mainElement}</h3>
+                    <h3>{name}</h3>
                 </li>
                 <div className={styles.menu__dropdown}>
                     { children.map(item => (
-                        <Link to={item.url} key={item.title}>
+                        <Link to={`/technic/${item.id}`} key={item.name}>
                             <li className={styles.menu__item}>
-                                {item.title}
+                                {item.name}
                             </li>
                         </Link>
                     )) }
@@ -24,54 +24,57 @@ const DropdownItem = ({ mainElement, children }: NavType) => {
 }
 
 const DropdownMenu = () => {
+    const [navData, setNavData] = useState([]);
+
     useEffect( () => {
         const fetchCategories = async () => {
             const data = await getAllCategories();
 
-            console.log(data);
+            setNavData(data);
         }
 
         fetchCategories();
     }, []);
 
-    const data: NavType[] = [
-        {
-            mainElement: 'Земляные', children: [
-                {title: 'Экскаватор', url: '/1'},
-                {title: 'Погрузчик', url: '/3'},
-                {title: 'Буровая', url: '/4'},
-            ]
-        },
-        {
-            mainElement: 'Дорожные', children: [
-                {title: 'Асфальтоукладчик', url: '/1'},
-                {title: 'Грейдер', url: '/2'},
-                {title: 'Каток', url: '/3'},
-                {title: 'Комунальная', url: '/4'},
-            ]
-        },
-        {
-            mainElement: 'Дорожные', children: [
-                {title: 'Грейдер', url: '/2'},
-                {title: 'Каток', url: '/3'},
-                {title: 'Комунальная', url: '/4'},
-            ]
-        },
-        {
-            mainElement: 'Дорожные', children: [
-                {title: 'Грейдер', url: '/2'},
-                {title: 'Каток', url: '/3'},
-                {title: 'Комунальная', url: '/4'},
-            ]
-        },
-    ]
+    // const data: NavType[] = [
+    //     {
+    //         mainElement: 'Земляные', children: [
+    //             {title: 'Экскаватор', url: '/1'},
+    //             {title: 'Погрузчик', url: '/3'},
+    //             {title: 'Буровая', url: '/4'},
+    //         ]
+    //     },
+    //     {
+    //         mainElement: 'Дорожные', children: [
+    //             {title: 'Асфальтоукладчик', url: '/1'},
+    //             {title: 'Грейдер', url: '/2'},
+    //             {title: 'Каток', url: '/3'},
+    //             {title: 'Комунальная', url: '/4'},
+    //         ]
+    //     },
+    //     {
+    //         mainElement: 'Дорожные', children: [
+    //             {title: 'Грейдер', url: '/2'},
+    //             {title: 'Каток', url: '/3'},
+    //             {title: 'Комунальная', url: '/4'},
+    //         ]
+    //     },
+    //     {
+    //         mainElement: 'Дорожные', children: [
+    //             {title: 'Грейдер', url: '/2'},
+    //             {title: 'Каток', url: '/3'},
+    //             {title: 'Комунальная', url: '/4'},
+    //         ]
+    //     },
+    // ]
 
     return (
         <nav className={styles.navbar}>
+            <Link to='/'>На главную</Link>
             {/*<div className={styles.navbar__categories}>*/}
                 {
-                    data.map(e => (
-                        <DropdownItem mainElement={e.mainElement} children={e.children} key={e.mainElement} />
+                    navData.map(e => (
+                        <DropdownItem name={e.name} children={e.children} key={e.name} />
                     ))
                 }
             {/*</div>*/}

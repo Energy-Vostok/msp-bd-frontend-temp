@@ -43,3 +43,14 @@ export const createTechnic = async (data) => {
         console.log(e);
     }
 }
+
+export const getTechnicByCategory = async (id) => {
+    try {
+        const response = await axios.get(`http://51.250.115.182:8080/api/catalog/category/${id}`);
+
+        return response.data
+    }
+    catch (e) {
+        console.log(e);
+    }
+}

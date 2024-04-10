@@ -34,6 +34,7 @@ type AddForm = {
 
 const AddTechnicForm = ({ id }: Props) => {
     const [properties, setProperties] = useState<string[]>([]);
+    const [contactsCount, setContactsCount] = useState<number>(1);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const {
@@ -107,7 +108,33 @@ const AddTechnicForm = ({ id }: Props) => {
                     </label>
 
                     <h3>Компания</h3>
+                    <label>Название
+                        <input type="text" {...register("company.name")}/>
+                    </label>
+                    <label>ИНН
+                        <input type="number" {...register("company.inn")}/>
+                    </label>
 
+                    <h3>Контакты</h3>
+                    {
+                        Array.from({ length: contactsCount }, (_, index) => (
+                            <div key={index}>
+                                <label>ФИО
+                                    <input type="text"/>
+                                </label>
+                                <label>Телефон
+                                    <input type="text"/>
+                                </label>
+                                <label>Email
+                                    <input type="text"/>
+                                </label>
+                                <label>Должность
+                                    <input type="text"/>
+                                </label>
+                            </div>
+                        ))
+                    }
+                    <button type='button' onClick={() => setContactsCount(prev => prev + 1)}>+</button>
 
                     <button>Отправить</button>
                 </form>
