@@ -1,4 +1,10 @@
 import {SubmitHandler, useForm} from "react-hook-form";
+import {useEffect, useState} from "react";
+import {getCategory} from "../api/categories.api.ts";
+
+interface Props {
+    id: number;
+}
 
 type AddForm = {
     name: string;
@@ -26,67 +32,87 @@ type AddForm = {
     images: FileList | null;
 }
 
-const AddTechnicForm = () => {
+const AddTechnicForm = ({ id }: Props) => {
+    const [properties, setProperties] = useState<string[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const {
         handleSubmit,
         register,
     } = useForm<AddForm>();
 
-    const submit: SubmitHandler<AddForm> = async () => {
-        const newData = {name: 'Земляные'};
+    useEffect(() => {
+        const fetchProperties = async () => {
+            setIsLoading(true);
 
-        alert(JSON.stringify(newData));
-        await fetch('http://51.250.115.182:8080/api/admin/category', {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            method: 'POST',
-            body: JSON.stringify(newData)
-        })
-            .then((res) => console.log(res))
-            .catch((e) => console.log(e))
+            if (id > 0) {
+                const data = await getCategory(id);
+
+                setProperties(data.properties);
+            } else {
+                setProperties([]);
+            }
+            setIsLoading(false);
+        }
+
+        fetchProperties();
+    }, [id]);
+
+    const submit: SubmitHandler<AddForm> = async (data) => {
+        console.log(data);
     }
 
     return (
         <>
-            <h1>Добавить новую технику</h1>
-            <form onSubmit={handleSubmit(submit)}>
-                <label>
-                    Название
-                    <input type="text" {...register("name")}/>
-                </label>
+            { id > 0
+                ? <form onSubmit={handleSubmit(submit)} className='formWrapper'>
+                    <label>
+                        Название
+                        <input type="text" {...register("name")}/>
+                    </label>
 
-                <label>
-                    Город
-                    <input type="text" {...register("city")}/>
-                </label>
+                    <label>
+                        Город
+                        <input type="text" {...register("city")}/>
+                    </label>
 
-                <label>Цена</label>
-                <label>
-                    С НДС
-                    <input type="number" {...register("price.withTax")}/>
-                </label>
-                <label>
-                    Без НДС
-                    <input type="number" {...register("price.withoutTax")}/>
-                </label>
-                <label>
-                    Наличные
-                    <input type="number" {...register("price.cash")}/>
-                </label>
+                    <h3>Характеристики</h3>
 
-                <label>Компания</label>
+                    {
+                        isLoading
+                            ? <h2>Загрузка...</h2>
+                            : <>
+                            {
+                                properties.map(p => (
+                                <label>{p.name}
+                                    <input type="text" />
+                                </label>
+                                ))
+                            }
+                            </>
+                    }
 
-                <label>
-                    Фотографии
-                    <input type="file" multiple {...register("images")} />
-                </label>
+                    <h3>Цена</h3>
+                    <label>
+                        С НДС
+                        <input type="number" {...register("price.withTax")}/>
+                    </label>
+                    <label>
+                        Без НДС
+                        <input type="number" {...register("price.withoutTax")}/>
+                    </label>
+                    <label>
+                        Наличные
+                        <input type="number" {...register("price.cash")}/>
+                    </label>
+
+                    <h3>Компания</h3>
 
 
-                <button>Отправить</button>
-            </form>
+                    <button>Отправить</button>
+                </form>
+                : <h2>Выберите тип техники</h2>
+            }
         </>
     );
 };

@@ -1,38 +1,54 @@
 import {SubmitHandler, useForm} from "react-hook-form";
-import {getAllCategories} from "../api/categories.api.ts";
-import {useEffect, useState} from "react";
+import {createCategory, getAllCategories} from "../api/categories.api.ts";
+import {useEffect, useRef, useState} from "react";
+import {Link} from "react-router-dom";
 
 interface IForm {
-    parentId: number,
+    parentId: string,
     name: string,
     properties: { name: string }[]
 }
 
-const AddTechnicForm = () => {
+const AddChildrenCategoryForm = () => {
     const [parentCategories, setParentCategories] = useState([]);
     const [propertiesCount, setPropertiesCount] = useState<number>(1);
     const [properties, setProperties] = useState([]);
+
+    const parentIdRef = useRef();
 
     const {
         handleSubmit,
         register,
         reset,
         setValue
-    } = useForm<IForm>();
+    } = useForm<IForm>({
+        defaultValues: {
+            parentId: '',
+            name: '',
+            properties: []
+        }
+    });
 
     useEffect(() => {
         const getParentCategories = async () => {
             const response = await getAllCategories();
 
             setParentCategories(response);
+            setValue("parentId", response[0].id);
         }
 
         getParentCategories();
     }, []);
 
     const submit: SubmitHandler<IForm> = async (data) => {
-        console.log(data);
-        reset();
+        await createCategory({name: 'Грейдеры', parentId: 3, properties: [ {name: 'Тип'}, {name: 'Вес'}, {name: 'Навесное оборудование'} ]});
+
+        // console.log(data);
+        //
+        // setPropertiesCount(1);
+        // setProperties([]);
+        //
+        // reset();
     }
 
     const parentCategoryHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -44,18 +60,23 @@ const AddTechnicForm = () => {
     const propertyHandler = (e: React.FormEvent<HTMLInputElement>) => {
         const value = e.target.value;
 
-        setProperties([...properties, {name: value}]);
+        if (value) {
+            setProperties([...properties, {name: value}]);
+        }
     }
-
-    console.log(properties);
 
     return (
         <>
             <h1>Добавить категорию</h1>
             <form onSubmit={handleSubmit(submit)} className='formWrapper'>
 
-                <label>Родительская категория
-                <select onChange={parentCategoryHandler}>
+                <Link to='/new/parent-category'>
+                    <button type='button'>Добавить большую категорию</button>
+                </Link>
+
+
+                <label>Большая категория
+                <select onChange={parentCategoryHandler} ref={parentIdRef}>
                     {
                         parentCategories.map(c => (
                             <option value={c.id} key={c.id}>{c.name}</option>
@@ -65,7 +86,7 @@ const AddTechnicForm = () => {
                 </label>
 
                 <label>Название категории
-                    <input type="text" {...register("name", {required: true})} />
+                    <input type="text" {...register("name")} />
                 </label>
 
                 {
@@ -78,10 +99,10 @@ const AddTechnicForm = () => {
                 }
                 <button type='button' onClick={() => setPropertiesCount(prev => prev + 1)}>+</button>
 
-                <button>Отправить</button>
+                <button onClick={() => setValue("properties", properties)}>Отправить</button>
             </form>
         </>
     );
 };
 
-export default AddTechnicForm;
+export default AddChildrenCategoryForm;

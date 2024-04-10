@@ -76,6 +76,7 @@ const DropdownMenu = () => {
                 }
             {/*</div>*/}
             <Link to='/new'>Добавить технику</Link>
+            <Link to='/new/category'>Добавить категорию</Link>
         </nav>
     )
 }
