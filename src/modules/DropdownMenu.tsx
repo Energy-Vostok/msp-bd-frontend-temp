@@ -12,7 +12,7 @@ const DropdownItem = ({ name, children }: NavType) => {
                 </li>
                 <div className={styles.menu__dropdown}>
                     { children.map(item => (
-                        <Link to={`/technic/${item.id}`} key={item.name}>
+                        <Link to={`/technic-list/${item.id}`} key={item.name}>
                             <li className={styles.menu__item}>
                                 {item.name}
                             </li>

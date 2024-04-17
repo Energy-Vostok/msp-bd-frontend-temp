@@ -3,8 +3,9 @@ import {Route, Routes} from "react-router-dom";
 import AddParentCategoryForm from "./pages/AddParentCategoryForm.tsx";
 import AddChildrenCategoryForm from "./pages/AddChildrenCategoryForm.tsx";
 import AddTechnic from "./pages/AddTechnic.tsx";
-import TechnicPage from "./pages/TechnicPage.tsx";
+import TechnicListPage from "./pages/TechnicListPage.tsx";
 import Main from "./pages/Main.tsx";
+import TechnicPage from "./pages/TechnicPage.tsx";
 
 function App() {
     return (
@@ -14,6 +15,7 @@ function App() {
                 <Route path='/' element={<Main />} />
 
                 <Route path='/technic/:id' element={<TechnicPage />} />
+                <Route path='/technic-list/:id' element={<TechnicListPage />} />
 
                 <Route path='/new' element={<AddTechnic />} />
                 <Route path='/new/parent-category' element={<AddParentCategoryForm />} />

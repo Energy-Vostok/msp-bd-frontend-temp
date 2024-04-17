@@ -41,7 +41,7 @@ const AddChildrenCategoryForm = () => {
     }, []);
 
     const submit: SubmitHandler<IForm> = async (data) => {
-        // await createCategory({name: 'Грейдеры', parentId: 3, properties: [ {name: 'Тип'}, {name: 'Вес'}, {name: 'Навесное оборудование'} ]});
+        await createCategory({name: 'Автовышка', parentId: 4, properties: [ {name: 'Вес'}, {name: 'Высота'}, {name: 'Навесное оборудование'} ]});
 
         // console.log(data);
         //

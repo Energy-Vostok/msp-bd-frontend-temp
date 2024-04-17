@@ -1,0 +1,22 @@
+.wrapper {
+  //display: flex;
+  //flex-direction: row;
+  //justify-content: space-between;
+  display: grid;
+  grid-template-columns: 0.2fr 1fr 0.5fr 0.2fr 0.2fr 0.2fr;
+  align-items: center;
+
+  padding: 15px 25px;
+
+  border: 1px solid rgb(var(--white-color));
+
+  img {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+.header {
+  background-color: rgb(var(--white-color));
+  color: rgb(var(--bg-color));
+}

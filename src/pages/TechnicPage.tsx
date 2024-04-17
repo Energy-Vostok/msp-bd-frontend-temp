@@ -1,18 +1,59 @@
+import {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
-import {getTechnicByCategory} from "../api/categories.api.ts";
+import {getTechnic} from "../api/technic.api.ts";
+
+interface ITechnicPage {
+    name: string,
+    city: string,
+    images: { id: number, url: string }[],
+    price: {
+        cash: number | null,
+        withTax: number | null,
+        withoutTax: number | null,
+    },
+    propertyValues: { id: number, propertyId: number, value: string }[],
+    company: {
+        name: string,
+        inn: string,
+        contacts: {
+            id: number,
+            fullName: string,
+            phone: string,
+            email: string,
+            role: string
+        }[]
+    }
+}
 
 function TechnicPage() {
-    const [techincList, setTechnicList] = useState([]);
-    const [title, setTitle] = useState<string>('');
+    const [technicData, setTechnicData] = useState<ITechnicPage>({
+        name: '',
+        city: 'string',
+        images: [],
+        price: {
+            cash: null,
+            withTax: null,
+            withoutTax: null,
+        },
+        propertyValues: [],
+        company: {
+            name: '',
+            inn: '',
+            contacts: []
+        }
+    });
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const { id } = useParams();
 
     useEffect(() => {
+        setIsLoading(true);
         const fetchTechnic = async () => {
-            const data = await getTechnicByCategory(id);
+            const data = await getTechnic(id);
 
-            setTitle(data.name);
-            setTechnicList(data.goods);
+            console.log(data);
+
+            setTechnicData(data);
+            setIsLoading(false);
         }
 
         fetchTechnic();
@@ -20,14 +61,59 @@ function TechnicPage() {
 
     return (
         <div>
-            <h1>{title}</h1>
-            <ul>
-                {
-                    techincList.map(t => (
-                        <li key={t.id}>{t.name}</li>
-                    ))
-                }
-            </ul>
+            {
+                isLoading && technicData
+                    ? <h2>Loading...</h2>
+                    : <>
+                        <h1>{technicData.name}</h1>
+                        <div>{technicData.city}</div>
+                        <ul>
+                            {
+                                technicData.images && technicData.images.map(i => (
+                                    <li key={i.url}>
+                                        <img src={i.url} alt={`${i.id}`} />
+                                    </li>
+                                ))
+                            }
+                        </ul>
+                        <div>
+                            <div>Наличные</div>
+                            <div>{technicData.price.cash}</div>
+                        </div>
+                        <div>
+                            <div>С НДС</div>
+                            <div>{technicData.price.withTax}</div>
+                        </div>
+                        <div>
+                            <div>Без НДС</div>
+                            <div>{technicData.price.withoutTax}</div>
+                        </div>
+                        <ul>
+                            {
+                                technicData.propertyValues && technicData.propertyValues.map(p => (
+                                    <li key={p.propertyId}>
+                                        <div>{p.value}</div>
+                                    </li>
+                                ))
+                            }
+                        </ul>
+                        <h3>{technicData.company.name}</h3>
+                        <div>{technicData.company.inn}</div>
+                        <h3>Контакты</h3>
+                        <ul>
+                            {
+                                technicData.company.contacts.map(c => (
+                                    <li key={c.id}>
+                                        <div>ФИО: {c.fullName}</div>
+                                        <div>Телефон: {c.phone}</div>
+                                        <div>Email: {c.email}</div>
+                                        <div>Должность: {c.role}</div>
+                                    </li>
+                                ))
+                            }
+                        </ul>
+                    </>
+            }
         </div>
     );
 }
